@@ -1,0 +1,1 @@
+{"name":"FastTasks","className":"DataModel","filePaths":["default.project.json"],"children":[{"name":"ReplicatedStorage","className":"ReplicatedStorage","children":[{"name":"FastTasks","className":"ModuleScript","filePaths":["src\\init.lua"],"children":[{"name":"config","className":"ModuleScript","filePaths":["src\\config.lua"]}]}]}]}

@@ -1,0 +1,26 @@
+{
+	"name": "TwoNet-Dev",
+	"tree": {
+		"$className": "DataModel",
+		
+		"ReplicatedStorage": {
+			"$path": "dev/shared",
+
+			"Packages": {
+				"$path": "Packages",
+				"$className": "Folder",
+				"TwoNet": {
+					"$path": "src"
+				}
+			}
+		},
+		
+		"ServerScriptService": {
+			"$path": "dev/server"
+		},
+		
+		"ReplicatedFirst": {
+			"$path": "dev/client"
+		}
+	}
+}
