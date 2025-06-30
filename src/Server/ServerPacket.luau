@@ -18,7 +18,7 @@ function ServerPacket:FireAllClients()
 end
 
 function ServerPacket:FireClients()
-	print("YeeHaw")
+	
 end
 
 function ServerPacket:New(...)
