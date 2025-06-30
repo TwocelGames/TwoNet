@@ -1,8 +1,7 @@
 [package]
-name = "twocelgames/fastsig"
-version = "0.1.0"
+name = "twocelgames/fasttasks"
+version = "1.0.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-FastTasks = "twocelgames/fasttasks@0.3.2"

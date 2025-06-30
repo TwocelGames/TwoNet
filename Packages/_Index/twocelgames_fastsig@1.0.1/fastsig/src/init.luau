@@ -7,10 +7,7 @@ local types = require(script:WaitForChild("types"))
 
 export type Signal<T...> = types.Signal<T...>
 
-if not game.ReplicatedStorage.FastTasks then
-	error(`FastTasks not found in ReplicatedStorage. Please add https://github.com/TwocelGames/FastTasks.`)
-end
-local FastTask = require(game.ReplicatedStorage.FastTasks)
+local FastTask = require(script.Parent.FastTasks)
 
 local newThread = (config.RUN_SIGNALS_IMMEDIATLY and FastTask.spawn) or FastTask.defer
 local resumeThread: any = (config.RUN_SIGNALS_IMMEDIATLY and task.spawn) or task.defer

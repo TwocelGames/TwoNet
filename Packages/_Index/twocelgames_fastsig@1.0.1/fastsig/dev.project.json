@@ -1,0 +1,19 @@
+{
+	"name": "fastsig-dev",
+
+	"tree": {
+		"$className": "DataModel",
+
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"Packages": {
+				"$className": "Folder",
+				"$path": "Packages",
+				"FastSig": {
+					"$path": "src"
+				}
+			}
+
+		}
+	}
+}

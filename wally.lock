@@ -4,15 +4,15 @@ registry = "test"
 
 [[package]]
 name = "twocelgames/fastsig"
-version = "0.1.0"
-dependencies = [["FastTasks", "twocelgames/fasttasks@0.3.2"]]
+version = "1.0.1"
+dependencies = [["FastTasks", "twocelgames/fasttasks@1.0.0"]]
 
 [[package]]
 name = "twocelgames/fasttasks"
-version = "0.3.2"
+version = "1.0.0"
 dependencies = []
 
 [[package]]
 name = "twocelgames/twonet"
 version = "0.1.0"
-dependencies = [["FastSig", "twocelgames/fastsig@0.1.0"], ["FastTasks", "twocelgames/fasttasks@0.3.2"]]
+dependencies = [["FastSig", "twocelgames/fastsig@1.0.1"]]
