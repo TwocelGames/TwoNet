@@ -27,4 +27,6 @@ return table.freeze{
 	-- Max items in array works similar to max packets
 	MAX_ARRAY_INDEX = 2 ^ 16,
 
+	-- The number of similar packets a payload can contain
+	MAX_PACKET_COUNT = 2 ^ 8
 }

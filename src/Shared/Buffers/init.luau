@@ -35,7 +35,7 @@ end
 local Buffers = {}
 
 
-function Buffers.get<T>(typeId: T): Types.BufferType<T>
+function Buffers.get<T>(typeId: T): Types.BufferType<T>?
 	return typeRecord[typeId:: any]
 end
 

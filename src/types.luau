@@ -15,6 +15,8 @@ export type Packet<T... = (...any)> = {
 	_id: number,
 }
 
+export type PacketCollection = { [number]: { { any }} }
+
 export type Read<T> = () -> (T, number)
 export type Write<T> = (T) -> number
 
