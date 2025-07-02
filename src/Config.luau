@@ -24,10 +24,10 @@ return table.freeze{
 	CYCLE_TIME = 1,
 
 	-- The maximum amount of data a player can send in 1 cycle (in bytes)
-	MAX_PLAYER_DATA_PER_CYCLE = 8000,
+	MAX_PLAYER_DATA_PER_CYCLE = 16000,
 
 	-- The maximum amount of packets a player can send in 1 cycle (this limit is needed to prevent exploiters from running too many callbacks to lag the server)
-	MAX_PLAYER_PACKETS_PER_CYCLE = 25,
+	MAX_PLAYER_PACKETS_PER_CYCLE = 75,
 
 	-- Wether the lib should kick offending players
 	CAN_KICK = true,

@@ -28,11 +28,10 @@ Create a `Packets.luau` file in `ReplicatedStorage`:
 -- Packets.luau
 
 local TwoNet = require(TwoNet)
-local packet = TwoNet.packet
 local types = TwoNet.types
 
 return table.freeze{
-	PacketOne = packet:New(types.string, types.boolean)
+	PacketOne = Twonet.packet(types.string, types.boolean)
 }
 ```
 

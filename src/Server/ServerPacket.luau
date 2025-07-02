@@ -26,13 +26,13 @@ ServerPacket["__index"] = ServerPacket
 
 local playerPackets: { [ Player ]: types.PacketCollection } = {}
 local groupPackets: { [ { Player} ]: types.PacketCollection } = setmetatable({}, {__mode = "k"}):: any
-local globalPackets: types.PacketCollection = table.clone(Process.packetArgCollection)
+local globalPackets: types.PacketCollection = Process.packetArgCollection
 
 local pendingPlayerPackets : { [ Player ]: types.PacketCollection } = {}
 local pendingPlayerPacketsCount : { [ Player ]: number } = {}
 
-local pendingGroupPackets: { [ { Player } ]: types.PacketCollection } = {}
-local pendingGroupPacketsCount : { [ { Player } ]: number } = {}
+local pendingGroupPackets: { [ { Player } ]: types.PacketCollection } = setmetatable({}, {__mode = "k"}):: any
+local pendingGroupPacketsCount : { [ { Player } ]: number } = setmetatable({}, {__mode = "k"}):: any
 
 local pendingGlobalPackets: types.PacketCollection = {}
 local pendingGlobalPacketsCount = 0
@@ -50,7 +50,7 @@ local cycleTime = Config.CYCLE_TIME
 
 function ServerPacket:FireClient(player, ...)
 	local packetCollection = playerPackets[player]
-
+	
 	if not packetCollection then
 		local start = os.clock()
 		repeat 
@@ -63,7 +63,7 @@ function ServerPacket:FireClient(player, ...)
 	end
 
 	local argCollection = packetCollection[self._id]
-	table.insert(argCollection, table.pack(...))
+	table.insert(argCollection, {...})
 
 	-- When first arg is inserted
 	if #argCollection == 1 then
@@ -81,12 +81,17 @@ function ServerPacket:FireClients(players, ...)
 	local packetCollection = groupPackets[players]
 
 	if not packetCollection then
-		packetCollection = table.clone(Process.packetArgCollection)
+		local newPacketCollection = {}
+		for packetId, _ in globalPackets do
+			newPacketCollection[packetId] = {}
+		end
+		packetCollection = newPacketCollection
 		groupPackets[players] = packetCollection
+		pendingGroupPacketsCount[players] = 0
 	end
 
 	local argCollection = packetCollection[self._id]
-	table.insert(argCollection, table.pack(...))
+	table.insert(argCollection, {...})
 
 	-- When first arg is inserted
 	if #argCollection == 1 then
@@ -102,7 +107,7 @@ end
 
 function ServerPacket:FireAllClients(...)
 	local argCollection = globalPackets[self._id]
-	table.insert(argCollection, table.pack(...))
+	table.insert(argCollection, {...})
 	if #argCollection == 1 then
 		pendingGlobalPackets[self._id] = argCollection
 		pendingGlobalPacketsCount += 1
@@ -120,7 +125,12 @@ end
 
 
 Players.PlayerAdded:Connect(function(player)
-	playerPackets[player] = table.clone(Process.packetArgCollection)
+	local packetCollection = {}
+	for packetId, _ in globalPackets do
+		packetCollection[packetId] = {}
+	end
+	pendingPlayerPacketsCount[player] = 0
+	playerPackets[player] = packetCollection
 	playerDataSizeRecord[player] = 0
 	playerPacketCountRecord[player] = 0
 end)
@@ -201,12 +211,14 @@ RunService.Heartbeat:Connect(function()
 
 		table.clear(pendingDecodeQueue)
 
-		-- Global Packets
-		if pendingGlobalPacketsCount > 0 then
-			local buf = Process.encode(pendingGlobalPackets, pendingGlobalPacketsCount)
-			remote:FireAllClients(buf)
-			pendingGlobalPacketsCount = 0
+		--Indivdual Player Packets
+		for player, packetCollection in pendingPlayerPackets do
+			local buf = Process.encode(packetCollection, pendingPlayerPacketsCount[player])
+			remote:FireClient(player, buf)
+			pendingPlayerPacketsCount[player] = 0
+			pendingPlayerPackets[player] = nil
 		end
+
 
 		-- Group Packets
 		for players, packetCollection in pendingGroupPackets do
@@ -217,14 +229,14 @@ RunService.Heartbeat:Connect(function()
 			pendingGroupPacketsCount[players] = 0
 			pendingGroupPackets[players] = nil
 		end
-
-		--Indivdual Player Packets
-		for player, packetCollection in pendingPlayerPackets do
-			local buf = Process.encode(packetCollection, pendingPlayerPacketsCount[player])
-			remote:FireClient(player, buf)
-			pendingPlayerPacketsCount[player] = 0
-			pendingPlayerPackets[player] = nil
+		
+		-- Global Packets
+		if pendingGlobalPacketsCount > 0 then
+			local buf = Process.encode(pendingGlobalPackets, pendingGlobalPacketsCount)
+			remote:FireAllClients(buf)
+			pendingGlobalPacketsCount = 0
 		end
+
 
 		-- Ratelimiter Reset
 		if os.clock() - lastCycleTime > cycleTime then

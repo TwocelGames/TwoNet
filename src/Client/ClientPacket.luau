@@ -20,7 +20,7 @@ local cycleTime = Config.CYCLE_TIME
 local packetArgReads = Process.packetArgReads
 local packetArgCounts = Process.packetArgCount
 
-local packetCollection = table.clone(Process.packetArgCollection)
+local packetCollection = Process.packetArgCollection
 local pendingPacketCollection = {}
 local pendingPacketsCount = 0
 local packetSignals = {}
@@ -36,7 +36,7 @@ ClientPacket["__index"] = ClientPacket
 
 function ClientPacket:FireServer(...)
 	local argCollection = packetCollection[self._id]
-	table.insert(argCollection, table.pack(...))
+	table.insert(argCollection, {...})
 	if #argCollection == 1 then
 		pendingPacketCollection[self._id] = argCollection
 		pendingPacketsCount += 1

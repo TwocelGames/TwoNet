@@ -7,8 +7,9 @@ local buffers = require(script.Parent.Parent.Shared.Buffers)
 local writer = buffers.writer
 local Config = require(script.Parent.Parent.Config)
 
+local MAX_PACKET_COUNT = Config.MAX_PACKET_COUNT - 1
 local writeId = buffers.getMethodFromSize(Config.MAX_PACKET_ID - 1)
-local writeCount = buffers.getMethodFromSize(Config.MAX_PACKET_COUNT)
+local writeCount = buffers.getMethodFromSize(MAX_PACKET_COUNT)
 
 local packetArgWrites: { {types.Write<any>} } = {}
 local packetArgReads: { {types.Read<any>} } = {}
@@ -17,8 +18,8 @@ local packetArgCollection: types.PacketCollection = {}
 
 local Process = {}
 
-function Process.register<A...>(packetId: number, ... : A...)
-	local typeIds: { any } = table.pack(...)
+function Process.register<A...>(packetId: number, ...)
+	local typeIds: { any } = { ... }
 	local writes = {}
 	local reads = {}
 	local count = 0
@@ -44,6 +45,13 @@ function Process.encode(collection: types.PacketCollection, uniquePackets: numbe
 	for id, argCollection in collection do
 		local uniqueArgs = #argCollection
 		writeId(id)
+		if uniqueArgs > MAX_PACKET_COUNT then
+			warn("[TWONET][PACKET][ENCODE] Max packet count exceeded, extra packet dropped, packet=", id)
+			for i = MAX_PACKET_COUNT + 1, uniqueArgs do
+				argCollection[i] = nil
+			end
+			uniqueArgs = MAX_PACKET_COUNT
+		end
 		writeCount(uniqueArgs)
 		local writes = packetArgWrites[id]
 		for i = 1, uniqueArgs do

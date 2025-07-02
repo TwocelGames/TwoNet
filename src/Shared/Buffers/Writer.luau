@@ -37,7 +37,7 @@ local function reserve(bytes: number): number
 		scale -= ( ( scale - 1 ) * brake )
 
 		local newBuf = create(newSize)
-		copy(newBuf, 0, buf, cur)
+		copy(newBuf, 0, buf, 0, cur)
 
 		buf = newBuf
 		size = newSize
@@ -53,9 +53,9 @@ local Writer = {}
 -- API
 function Writer.pop(): (buffer, number)
 	local oldCur = cur
-	cur = 0
 	local newBuf = create(oldCur)
-	copy(newBuf, 0, buf, oldCur)
+	copy(newBuf, 0, buf, 0, oldCur)
+	cur = 0
 	return newBuf, oldCur
 end
 
@@ -88,7 +88,7 @@ function Writer.buffer(val: buffer): number
 	assert(len <= maxHeaderData, "[TWONET][BUFFERS][WRITER]: Buffer size overflow")
 	local startIndex = reserve(len + headerLength)
 	writeheader(buf, startIndex, len)
-	copy(buf, startIndex + headerLength, val, len)
+	copy(buf, startIndex + headerLength, val, 0, len)
 	return len
 end
 
