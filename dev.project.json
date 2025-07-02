@@ -1,26 +1,29 @@
 {
-	"name": "TwoNet-Dev",
-	"tree": {
-		"$className": "DataModel",
-		
-		"ReplicatedStorage": {
-			"$path": "dev/shared",
+  "name": "TwoNet-Dev",
+  "tree": {
+    "$className": "DataModel",
 
-			"Packages": {
-				"$path": "Packages",
-				"$className": "Folder",
-				"TwoNet": {
-					"$path": "src"
-				}
-			}
-		},
-		
-		"ServerScriptService": {
-			"$path": "dev/server"
-		},
-		
-		"ReplicatedFirst": {
-			"$path": "dev/client"
-		}
-	}
+    "ReplicatedStorage": {
+      "$path": "dev/shared",
+
+      "Packages": {
+        "$path": "Packages",
+        "$className": "Folder",
+        "TwoNet": {
+          "$path": "src",
+          "TwoNetRemote": {
+            "$className": "RemoteEvent"
+          }
+        }
+      }
+    },
+
+    "ServerScriptService": {
+      "$path": "dev/server"
+    },
+
+    "ReplicatedFirst": {
+      "$path": "dev/client"
+    }
+  }
 }

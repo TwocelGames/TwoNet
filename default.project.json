@@ -1,6 +1,9 @@
 {
   "name": "TwoNet",
   "tree": {
-    "$path": "src"
+    "$path": "src",
+    "TwoNetRemote": {
+      "$className": "RemoteEvent"
+    }
   }
 }

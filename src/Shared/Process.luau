@@ -7,12 +7,13 @@ local buffers = require(script.Parent.Parent.Shared.Buffers)
 local writer = buffers.writer
 local Config = require(script.Parent.Parent.Config)
 
-local writeId, readId = buffers.getMethodFromSize(Config.MAX_PACKET_ID - 1)
-local writeCount, readCount = buffers.getMethodFromSize(Config.MAX_PACKET_COUNT)
+local writeId = buffers.getMethodFromSize(Config.MAX_PACKET_ID - 1)
+local writeCount = buffers.getMethodFromSize(Config.MAX_PACKET_COUNT)
 
 local packetArgWrites: { {types.Write<any>} } = {}
 local packetArgReads: { {types.Read<any>} } = {}
 local packetArgCounts : { number } = {}
+local packetArgCollection: types.PacketCollection = {}
 
 local Process = {}
 
@@ -31,12 +32,14 @@ function Process.register<A...>(packetId: number, ... : A...)
 		table.insert(reads, type.read)
 	end
 
+	packetArgCollection[packetId] = {}
 	packetArgWrites[packetId] = writes
 	packetArgReads[packetId] = reads
 	packetArgCounts[packetId] = count
 end
 
-function Process.encode(collection: types.PacketCollection, uniquePackets: number): buffer
+-- Encodes the given collection into a buffer and also clears the collection
+function Process.encode(collection: types.PacketCollection, uniquePackets: number): (buffer, number)
 	writeId(uniquePackets)
 	for id, argCollection in collection do
 		local uniqueArgs = #argCollection
@@ -50,8 +53,13 @@ function Process.encode(collection: types.PacketCollection, uniquePackets: numbe
 			end
 			argCollection[i] = nil
 		end		
+		collection[id] = nil
 	end
 	return writer.pop()
 end
+
+Process.packetArgCollection = packetArgCollection
+Process.packetArgReads = packetArgReads
+Process.packetArgCount = packetArgCounts
 
 return Process

@@ -19,6 +19,27 @@ return table.freeze{
 	BUFFER_HEADER_READ = buffer.readu16,
 	BUFFER_HEADER_LENGTH = 2,
 	MAX_HEADER_DATA = 2 ^ 16,
+
+	-- The time the rate limiter takes to reset (in seconds)
+	CYCLE_TIME = 1,
+
+	-- The maximum amount of data a player can send in 1 cycle (in bytes)
+	MAX_PLAYER_DATA_PER_CYCLE = 8000,
+
+	-- The maximum amount of packets a player can send in 1 cycle (this limit is needed to prevent exploiters from running too many callbacks to lag the server)
+	MAX_PLAYER_PACKETS_PER_CYCLE = 25,
+
+	-- Wether the lib should kick offending players
+	CAN_KICK = true,
+
+	-- The message to be displayed when player is kicked by the lib
+	PLAYER_KICK_MESSAGE = "Suspicious network activity, kicked for safety.",
+
+	-- The message to be displayed when lib decides to disconnect a client from the client-side
+	CLIENT_SELF_DISCONNECT_MESSAGE = "Suspicious network activity, client executed disconnect for safety.",
+
+	-- The time the system should try to wait for a player to be loaded before thier packets get dropped ( in seconds )
+	PLAYER_NOT_LOADED_RETRY_TIMEOUT = 1,
 	
 	-- The maximum number that can be used as a packet id ( > value u means u can create more packets)
 	-- greater value will increase the payload size since we will have to use larger datatypes to write packetId and count	

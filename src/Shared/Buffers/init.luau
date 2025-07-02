@@ -11,11 +11,6 @@ local typeRecord: { Types.BufferType<any> } = {}
 local idCounter = 0
 
 local function registerType<T>(read: Types.Read<T>, write: Types.Write<T>): T
-
-	if idCounter > Config.MAX_PACKET_ID then
-		error("[TWONET][BUFFERS][REGISTER] Maximum packet count reached, change this value in configs")
-	end
-
 	local typeId = idCounter
 	idCounter += 1
 

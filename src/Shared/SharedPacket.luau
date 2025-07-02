@@ -25,7 +25,7 @@ end
 
 local packetIdCounter = -1
 
-function Packet:New()
+function Packet:New(...)
 	local packet: types.Packet = setmetatable({}, self):: any
 	packet._id = packetIdCounter
 	packetIdCounter += 1

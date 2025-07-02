@@ -19,12 +19,12 @@ function Array.New<T>(typeId: T)
 	end
 	
 	local type = Buffers.get(typeId)
-	local readType = type.read
-	local writeType = type.write
-
 	if not type then
 		error("[TWONET][ARRAY][CONSTRUCTOR] array type must be a valid registered buffer type.")
 	end
+
+	local readType = type.read
+	local writeType = type.write
 
 	local function write(val: {T}): number
 		local count = #val
