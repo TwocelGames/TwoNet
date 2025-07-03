@@ -9,6 +9,7 @@ local Process = require(script.Parent.Parent.Shared.Process)
 local Config = require(script.Parent.Parent.Config)
 local Buffers = require(script.Parent.Parent.Shared.Buffers)
 local RunService = game:GetService("RunService")
+local player = game:GetService("Players").LocalPlayer
 
 local remote = script.Parent.Parent:WaitForChild("TwoNetRemote")
 local reader = Buffers.reader
@@ -98,9 +99,13 @@ RunService.Heartbeat:Connect(function()
 		if pendingPacketsCount > 0 then
 			if dataSentThisCycle > maxDataPerCycle then
 				warn("[TWONET][PACKETS][DECODE] data limit exceeded, packets have been delayed")
+				if Config.CAN_KICK then
+					player:Kick(Config.CLIENT_SELF_DISCONNECT_MESSAGE)
+				end
 				return
 			end
 			if packetsSentThisCycle > maxPacketsPerCycle then
+				player:Kick(Config.CLIENT_SELF_DISCONNECT_MESSAGE)
 				warn("[TWONET][PACKETS][DECODE] packet limit exceeded, packets have been delayed")
 				return
 			end

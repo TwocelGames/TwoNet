@@ -121,4 +121,16 @@ function Reader.vector3(): (Vector3, number)
 	return Vector3.new(x, y, z), 1
 end
 
+function Reader.cframe(): (CFrame, number)
+	local x = readf32(buf, cur)
+	local y = readf32(buf, cur + 4)
+	local z = readf32(buf, cur + 8)
+	local rx = readf32(buf, cur)
+	local ry = readf32(buf, cur + 4)
+	local rz = readf32(buf, cur + 8)
+	cur += 24
+	return CFrame.new(x, y, z) * CFrame.Angles(rx, ry, rz), 24
+end
+
+
 return table.freeze(Reader)

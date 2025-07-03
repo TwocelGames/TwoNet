@@ -66,6 +66,7 @@ Buffers.types = {
 	buffer = registerType(Reader.buffer, Writer.buffer),
 	boolean = registerType(Reader.boolean, Writer.boolean),
 	vector3 = registerType(Reader.vector3, Writer.vector3),
+	cframe = registerType(Reader.cframe, Writer.cframe)
 }
 
 return Buffers

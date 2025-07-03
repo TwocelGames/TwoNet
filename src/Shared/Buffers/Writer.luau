@@ -157,4 +157,17 @@ function Writer.vector3(val: Vector3): number
 	return 12
 end
 
+function Writer.cframe(val: CFrame): number
+	local startIndex = reserve(12)
+	local pos = val.Position
+	writef32(buf, startIndex, pos.X)
+	writef32(buf, startIndex + 4, pos.Y)
+	writef32(buf, startIndex + 8, pos.Z)
+	local rx, ry, rz = val:ToEulerAnglesXYZ()
+	writef32(buf, startIndex + 12, rx)
+	writef32(buf, startIndex + 16, ry)
+	writef32(buf, startIndex + 20, rz)
+	return 24
+end
+
 return table.freeze(Writer)
